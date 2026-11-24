@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0f2a43"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="TIC"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>TIC · Peringkat Tenis</title>
+<style>
+:root{--bg:#f3f5f9;--card:#fff;--tx:#0f2233;--mu:#64768a;--bd:#e0e6ee;--navy:#0f2a43;--gold:#c9a227;--ac:#1f6b4a;--up:#1d8a4a;--dn:#c0392b;--hi:#fbf6e4;--bar:#d9e6f2;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a141f;--card:#13212f;--tx:#e8eef5;--mu:#8ea2b6;--bd:#233545;--ac:#4fc08a;--up:#5fd68a;--dn:#ef7b6e;--hi:#262412;--bar:#1f3a52;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a141f;--card:#13212f;--tx:#e8eef5;--mu:#8ea2b6;--bd:#233545;--ac:#4fc08a;--up:#5fd68a;--dn:#ef7b6e;--hi:#262412;--bar:#1f3a52;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.hero{background:linear-gradient(135deg,#0f2a43,#17476b 70%,#1f6b4a);color:#fff;padding:22px 16px 56px}
+.wrap{max-width:980px;margin:0 auto;padding:0 14px}.hero .wrap{display:flex;gap:14px;align-items:center;padding:0}
+.hero h1{margin:0;font-size:22px;letter-spacing:.2px}.hero p{margin:2px 0 0;font-size:13px;opacity:.85}
+.gold{color:#e8c85a}.badge{display:inline-block;font-size:11px;border:1px solid rgba(255,255,255,.4);border-radius:12px;padding:2px 9px;margin:8px 6px 0 0;opacity:.9}
+main{max-width:980px;margin:-40px auto 24px;padding:0 14px}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+@media(max-width:620px){.kpi{grid-template-columns:repeat(2,1fr)}}
+.k{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px;box-shadow:0 2px 8px rgba(15,34,51,.08)}
+.k b{display:block;font-size:24px}.k span{font-size:12px;color:var(--mu)}
+nav{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:8px 14px;border-radius:20px;font-size:14px;cursor:pointer}
+nav button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:14px}
+.card h2{font-size:16px;margin:0 0 10px}.sc{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:8px;text-align:left;border-bottom:1px solid var(--bd);white-space:nowrap}
+th{color:var(--mu);font-size:12px;font-weight:600}.n{text-align:right}tr.top td{background:var(--hi)}
+.up{color:var(--up)}.dn{color:var(--dn)}.mu{color:var(--mu)}
+.tag{font-size:11px;padding:2px 7px;border-radius:10px;border:1px solid var(--bd);color:var(--mu);margin-left:6px}
+.bar{height:6px;border-radius:3px;background:var(--bar);width:90px;display:inline-block;vertical-align:middle;margin-left:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ac),var(--gold))}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:3px;background:var(--bd)}.dM{background:var(--up)}.dK{background:var(--dn)}.dS{background:var(--mu)}
+.pod{display:flex;align-items:flex-end;justify-content:center;gap:10px;margin:4px 0 6px}
+.pc{flex:1;max-width:190px;text-align:center}.pc .nm{font-weight:600;font-size:14px;margin-bottom:2px}.pc .rt{font-size:12px;color:var(--mu);margin-bottom:6px}
+.pc .bl{border-radius:10px 10px 0 0;color:#fff;font-size:26px;font-weight:700;padding-top:6px}
+.b1{height:96px;background:linear-gradient(#e4be3c,#b8921a)}.b2{height:72px;background:linear-gradient(#aab6c3,#7f8d9c)}.b3{height:56px;background:linear-gradient(#cf935d,#a1672f)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{padding:4px 10px;border:1px dashed var(--bd);border-radius:14px;font-size:13px;color:var(--mu)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:560px){.grid{grid-template-columns:1fr}}
+label{display:block;font-size:12px;color:var(--mu);margin-bottom:3px}
+select,input,textarea{width:100%;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font-size:15px;font-family:inherit}
+.btn{background:var(--navy);color:#fff;border:0;padding:10px 16px;border-radius:8px;font-size:15px;cursor:pointer}
+.btn.wa{background:#1f9d57}.btn.g{background:transparent;color:var(--mu);border:1px solid var(--bd);padding:6px 10px;font-size:13px}
+.team{border:1px solid var(--bd);border-radius:10px;padding:10px}.err{color:var(--dn);font-size:13px;min-height:18px;margin:8px 0 0}
+.note{background:var(--hi);border:1px solid var(--gold);border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:14px}
+footer{text-align:center;color:var(--mu);font-size:12px;padding:0 14px 24px}
+</style></head><body>
+<header class="hero"><div class="wrap">
+<svg width="58" height="58" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="29" fill="#c9e24a"></circle><path d="M8 20c14 6 14 30 0 36M56 8c-14 6-14 30 0 36" stroke="#fff" stroke-width="3" fill="none"></path><polyline points="14,46 26,36 34,41 50,22" stroke="#0f2a43" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></polyline></svg>
+<div><h1>Tenis <span class="gold">Investment</span> Club</h1><p>Papan Peringkat Tenis · Musim 2026</p><span class="badge">TIC</span><span class="badge">Rating Elo per pemain</span><span class="badge" id="upd">Update terakhir: 24 Nov 2026</span></div></div></header>
+<main><div id="app"></div></main>
+<footer>Tenis Investment Club (TIC) · tenis, investasi, dan diskusi yang sehat.</footer>
+<script type="application/json" id="data">{"demo":false,"admins":["Denny","Tsani"],"members":["Tsani","Ade R","Adri","Abul","Agus S","Alfi Zakki","Aprimon","Ari W","Arva","Bima","Cico","Gia","Hamid","Indra R","Kelvin","Aldi","Sandy","Danil","Miko","Djokovic","Hanif","Rendy","Setiaji","Tomi","Yudi Darun","Zaky","Denny","Iman"],"matches":[["2026-11-21","Djokovic","Setiaji","Abul","Bima",6,4],["2026-11-21","Abul","Bima","Denny","Hamid",6,2],["2026-11-21","Djokovic","Setiaji","Denny","Hamid",5,5],["2026-11-22","Adri","Denny","Ade R","Djokovic",6,4],["2026-11-22","Ade R","Denny","Adri","Yudi Darun",6,4],["2026-11-22","Abul","Sandy","Setiaji","Yudi Darun",6,3],["2026-11-22","Adri","Yudi Darun","Djokovic","Setiaji",5,5],["2026-11-24","Ade R","Denny","Adri","Yudi Darun",6,4]],"jadwal":[{"tgl":"2026-11-25","jam":"06:00","tempat":"Lapangan Kantor Pusat","cat":"bola disiapkan, konsumsi bawa masing-masing","peserta":["Abul","Alfi Zakki","Bima","Djokovic","Iman","Setiaji","Tsani"]}],"updated":"2026-11-24T02:36:11.168Z"}</script>
+<script>
+let D=JSON.parse(document.getElementById("data").textContent),tab="rank",ADMIN=false,shareTxt="",EDM=null,EDJ=null,CONFJ=null;D.jadwal=D.jadwal||[];
+const NOW=new Date(),MON=NOW.getFullYear()+"-"+String(NOW.getMonth()+1).padStart(2,"0"),TODAY=MON+"-"+String(NOW.getDate()).padStart(2,"0");
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function compute(){
+  const P={};D.members.forEach(n=>P[n]={n,r:1000,m:0,w:0,s:0,k:0,gf:0,ga:0,last:null,d:0,pts:0,pm:0,days:{},form:[]});
+  const ms=D.matches.map((m,i)=>({i,date:m[0],a:[m[1],m[2]],b:[m[3],m[4]],sa:m[5],sb:m[6]})).sort((x,y)=>x.date.localeCompare(y.date)||x.i-y.i);
+  for(const m of ms){
+    const A=m.a.map(n=>P[n]),B=m.b.map(n=>P[n]);if([...A,...B].some(p=>!p))continue;
+    const ra=(A[0].r+A[1].r)/2,rb=(B[0].r+B[1].r)/2,ea=1/(1+Math.pow(10,(rb-ra)/400)),M=1+Math.abs(m.sa-m.sb)/(m.sa+m.sb),sa=m.sa>m.sb?1:m.sa===m.sb?.5:0;
+    const run=(T,e,s,gf,ga)=>T.forEach(p=>{const K=p.m<10?40:24,d=K*M*(s-e);p.r+=d;p.d=d;p.m++;
+      s===1?p.w++:s===.5?p.s++:p.k++;p.form.push(s===1?"M":s===.5?"S":"K");p.gf+=gf;p.ga+=ga;p.last=m.date;p.pts++;
+      p.days[m.date]=(p.days[m.date]||0)+1;if(m.date.startsWith(MON))p.pm++});
+    run(A,ea,sa,m.sa,m.sb);run(B,1-ea,1-sa,m.sb,m.sa);
+  }
+  Object.values(P).forEach(p=>{const ds=Object.entries(p.days).filter(([d,c])=>c>=2);p.pts+=2*ds.length;p.pm+=2*ds.filter(([d])=>d.startsWith(MON)).length;
+    p.pct=p.m?(p.w+.5*p.s)/p.m:0;p.sel=p.gf-p.ga;p.idle=p.last?Math.floor((NOW-new Date(p.last+"T00:00:00"))/864e5):null});
+  return P}
+const cmp=(a,b)=>b.r-a.r||b.pct-a.pct||b.sel-a.sel||b.m-a.m||a.n.localeCompare(b.n);
+const dots=p=>p.form.slice(-5).map(f=>`<span class="dot d${f}"></span>`).join("");
+function view(){const fo=document.querySelector("footer");if(fo&&D.updated)fo.textContent="Data diperbarui "+new Date(D.updated).toLocaleString("id-ID",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})+" · Tarik layar ke bawah jika belum terlihat berubah.";
+  const P=compute(),all=Object.values(P),pl=all.filter(p=>p.m>0).sort(cmp),none=all.filter(p=>!p.m).sort((a,b)=>a.n.localeCompare(b.n));
+  const act=[...pl].sort((a,b)=>b.pm-a.pm||b.pts-a.pts||a.n.localeCompare(b.n));
+  const last=D.matches.reduce((x,m)=>m[0]>x?m[0]:x,"");
+  document.getElementById("upd").textContent=last?"Update terakhir: "+new Date(last+"T00:00:00").toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"}):"Belum ada data";
+  const tabs=[["rank","Peringkat"],["jad","Jadwal"],["act","Keaktifan"],["hist","Pertandingan"]];if(ADMIN)tabs.push(["adm","⚙ Admin"]);
+  let h=D.demo?`<div class="note"><b>Data contoh.</b> Nama dan hasil di bawah hanya ilustrasi.${ADMIN?" Buka tab Admin untuk mulai dengan data nyata.":""}</div>`:"";
+  h+=`<div style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:10px;flex-wrap:wrap"><button class="btn wa" onclick="shareApp()">📤 Bagikan ke WhatsApp</button><button class="btn g" onclick="copyLink()">Salin tautan</button></div><div id="shr"></div>`;
+  h+=`<div class="kpi"><div class="k"><b>${pl.length}</b><span>Pemain berperingkat</span></div><div class="k"><b>${D.matches.length}</b><span>Pertandingan</span></div><div class="k"><b>${none.length}</b><span>Belum bertanding</span></div><div class="k"><b>${pl.length?Math.round(pl[0].r):"–"}</b><span>Rating tertinggi</span></div></div>`;
+  h+=`<nav>${tabs.map(([k,l])=>`<button class="${tab===k?"on":""}" onclick="tab='${k}';view()">${l}</button>`).join("")}${ADMIN?'<button onclick="logoutA()">Keluar admin</button>':'<button onclick="loginA()">🔑 Admin</button>'}</nav>`;
+  if(tab==="rank"){{const u=upc();if(u.length)h+=jCard(u[0],true)}
+    if(pl.length>=3){const o=[[1,"b2"],[0,"b1"],[2,"b3"]];h+=`<div class="card"><h2>🏆 Podium</h2><div class="pod">`+o.map(([i,c])=>`<div class="pc"><div class="nm">${esc(pl[i].n)}</div><div class="rt">${Math.round(pl[i].r)}</div><div class="bl ${c}">${i+1}</div></div>`).join("")+`</div></div>`}
+    const mx=pl.length?pl[0].r:1000,mn=pl.length?pl[pl.length-1].r:1000;
+    h+=`<div class="card"><h2>Peringkat Hasil Pertandingan</h2><div class="sc"><table><tr><th>#</th><th>Nama</th><th class="n">Rating</th><th class="n">Δ</th><th>Form</th><th class="n">Main</th><th class="n">M-S-K</th><th class="n">% Menang</th><th class="n">Selisih game</th></tr>`+
+    (pl.map((p,i)=>{const w=mx===mn?100:20+80*(p.r-mn)/(mx-mn);return `<tr class="${i<3?"top":""}"><td>${i+1}</td><td>${esc(p.n)}${p.m<5?'<span class="tag">provisional</span>':""}${p.idle>56?'<span class="tag">tidak aktif</span>':""}</td><td class="n"><b>${Math.round(p.r)}</b><span class="bar"><i style="width:${w}%"></i></span></td><td class="n ${p.d>.5?"up":p.d<-.5?"dn":"mu"}">${p.d>.5?"▲ ":p.d<-.5?"▼ ":"– "}${Math.abs(Math.round(p.d))}</td><td>${dots(p)}</td><td class="n">${p.m}</td><td class="n">${p.w}-${p.s}-${p.k}</td><td class="n">${Math.round(p.pct*100)}%</td><td class="n">${p.sel>0?"+":""}${p.sel}</td></tr>`}).join("")||`<tr><td colspan="9" class="mu">Belum ada pertandingan.</td></tr>`)+
+    `</table></div><p class="mu" style="font-size:12px;margin:8px 0 0">Δ = perubahan pada pertandingan terakhir. M-S-K = menang, seri, kalah. Titik form = 5 hasil terakhir.</p></div>`;
+    h+=`<div class="card"><h2>Belum Pernah Bertanding (${none.length})</h2><div class="chips">`+(none.map(p=>`<span class="chip">${esc(p.n)}</span>`).join("")||`<span class="mu">Semua anggota sudah bertanding 🎉</span>`)+`</div></div>`;
+    shareTxt=`🎾 *TIC · Peringkat Tenis*\n${NOW.toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"})}\n\n🏆 *Top 5 Hasil Pertandingan*\n`+pl.slice(0,5).map((p,i)=>`${i+1}. ${p.n} – ${Math.round(p.r)}`).join("\n")+`\n\n🔥 *Paling Rajin Bulan Ini*\n`+act.filter(p=>p.pm).slice(0,5).map((p,i)=>`${i+1}. ${p.n} – ${p.pm} poin`).join("\n")+(none.length?`\n\n👟 ${none.length} anggota belum bertanding. Yuk main!`:"");
+    h+=`<div class="card"><h2>Bagikan ke WhatsApp</h2><button class="btn wa" onclick="copyShare()">Salin rekap untuk WhatsApp</button> <span id="cm" class="mu" style="font-size:13px"></span><textarea id="sh" rows="8" style="margin-top:10px;display:none" readonly></textarea></div>`;
+  }
+  if(tab==="jad"){const u=upc();h+=u.length?u.map((j,k)=>jCard(j,k===0)).join(""):`<div class="card"><h2>📅 Jadwal</h2><p class="mu" style="margin:0">Belum ada jadwal pertandingan.${ADMIN?" Tambahkan di tab Admin.":""}</p></div>`}
+  if(tab==="act")h+=`<div class="card"><h2>Peringkat Keaktifan</h2><div class="sc"><table><tr><th>#</th><th>Nama</th><th class="n">Poin bulan ini</th><th class="n">Poin total</th><th class="n">Pertandingan</th></tr>`+act.map((p,i)=>`<tr class="${i<3&&p.pm?"top":""}"><td>${i+1}</td><td>${esc(p.n)}</td><td class="n"><b>${p.pm}</b></td><td class="n">${p.pts}</td><td class="n">${p.m}</td></tr>`).join("")+`</table></div><p class="mu" style="font-size:12px;margin:8px 0 0">+1 tiap pertandingan, +2 bonus untuk hari bermain minimal 2 pertandingan. Tidak memengaruhi rating; dasar reward Pemain Paling Rajin.</p></div>`;
+  if(tab==="hist")h+=`<div class="card"><h2>Riwayat Pertandingan</h2><div class="sc"><table><tr><th>Tanggal</th><th>Tim A</th><th class="n">Skor</th><th>Tim B</th>${ADMIN?"<th></th>":""}</tr>`+
+    D.matches.map((m,i)=>[m,i]).sort((x,y)=>y[0][0].localeCompare(x[0][0])||y[1]-x[1]).map(([m,i])=>`<tr><td>${m[0]}</td><td>${esc(m[1])} &amp; ${esc(m[2])}</td><td class="n"><b>${m[5]}-${m[6]}</b></td><td>${esc(m[3])} &amp; ${esc(m[4])}</td>${ADMIN?`<td><button class="btn g" onclick="editM(${i})">Edit</button> <button class="btn g" onclick="delM(${i})" style="${CONF===i?'color:#c0392b;border-color:#c0392b':''}">${CONF===i?"Yakin? Klik lagi":"Hapus"}</button></td>`:""}</tr>`).join("")+`</table></div></div>`;
+  if(tab==="adm"&&ADMIN){
+    const e=EDM!=null?D.matches[EDM]:null,opt=`<option value="">Pilih…</option>`+[...D.members].sort().map(n=>`<option>${esc(n)}</option>`).join(""),sel=i=>{const v=e?e[1+i]:"";return `<select id="p${i}">${opt.replace(`<option>${esc(v)}</option>`,()=>`<option selected>${esc(v)}</option>`)}</select>`};
+    h+=`<div class="card"><h2>${e?"Edit Pertandingan":"Catat Pertandingan"}</h2><div style="margin-bottom:10px;max-width:200px"><label>Tanggal</label><input type="date" id="dt" value="${e?e[0]:TODAY}"></div><div class="grid"><div class="team"><label><b>Tim A</b></label>${sel(0)}<div style="height:6px"></div>${sel(1)}<div style="height:6px"></div><label>Skor game</label><input type="number" id="sa" min="0" max="9" inputmode="numeric" value="${e?e[5]:""}"></div><div class="team"><label><b>Tim B</b></label>${sel(2)}<div style="height:6px"></div>${sel(3)}<div style="height:6px"></div><label>Skor game</label><input type="number" id="sb" min="0" max="9" inputmode="numeric" value="${e?e[6]:""}"></div></div><p class="err" id="er"></p><button class="btn" onclick="addM()">${e?"Simpan perubahan":"Simpan hasil"}</button>${e?' <button class="btn g" onclick="EDM=null;view()">Batal</button>':""}</div>
+    ${admJ()}${admRen()}<div class="card"><h2>Tambah Anggota</h2><div style="display:flex;gap:8px"><input id="nm" placeholder="Nama anggota baru"><button class="btn" onclick="addP()">Tambah</button></div></div>
+    <div class="card"><h2>Daftar Pengurus (admin)</h2><div class="chips" style="margin-bottom:10px">${D.admins.map(a=>`<span class="chip">${esc(a)} <a href="#" onclick="rmA('${esc(a).replace(/'/g,"")}');return false" class="dn">✕</a></span>`).join("")||'<span class="mu">Belum ada</span>'}</div><div style="display:flex;gap:8px"><select id="ad">${opt}</select><button class="btn" onclick="addA()">Tambah</button></div><p class="mu" style="font-size:12px">Hak mengisi data ditentukan lewat akses Editor di menu Bagikan artifact (lihat penjelasan dari Claude). Daftar ini untuk ditampilkan.</p></div>
+    ${D.demo?`<div class="card"><h2>Mulai data nyata</h2><p class="mu" style="margin-top:0">Hapus semua pertandingan contoh. Daftar nama tetap, ganti sesuai anggota TIC.</p><button class="btn g" onclick="clearDemo()">Hapus data contoh</button></div>`:""}`;
+  }
+  document.getElementById("app").innerHTML=h;
+}
+function copyShare(){const t=document.getElementById("sh");t.style.display="block";t.value=shareTxt;t.select();const c=document.getElementById("cm");
+  try{navigator.clipboard.writeText(shareTxt).then(()=>c.textContent="Tersalin. Tempel di WhatsApp.",()=>c.textContent="Salin manual dari kotak di bawah.")}catch(e){c.textContent="Salin manual dari kotak di bawah."}}
+
+const hari=t=>new Date(t+"T00:00:00").toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+const wkt=j=>String(j).replace(":",".")+" WIB";
+function upc(){return D.jadwal.map((j,i)=>({...j,i})).filter(j=>j.tgl>=TODAY).sort((a,b)=>(a.tgl+a.jam).localeCompare(b.tgl+b.jam))}
+function jCard(j,big){return `<div class="card"${big?' style="border-color:var(--gold)"':""}><h2>${big?"📅 Jadwal Berikutnya":"📅 Jadwal"}</h2><div style="font-size:17px;font-weight:700">${esc(hari(j.tgl))}</div><div style="margin:2px 0">🕖 ${esc(wkt(j.jam))}${j.tempat?` · 📍 ${esc(j.tempat)}`:""}</div>${j.cat?`<div class="mu" style="font-size:13px">${esc(j.cat)}</div>`:""}<div style="margin:10px 0 6px;font-weight:600;font-size:13px">👥 Peserta (${j.peserta.length})</div><div class="chips">${j.peserta.map(n=>`<span class="chip" style="border-style:solid;color:var(--tx)">${esc(n)}</span>`).join("")||'<span class="mu">Belum ada peserta</span>'}</div><p style="margin:12px 0 0"><button class="btn wa" onclick="copyJ(${j.i})">Salin jadwal untuk WhatsApp</button> <span class="mu" id="cj${j.i}" style="font-size:13px"></span></p><textarea id="tj${j.i}" rows="7" readonly style="display:none;margin-top:8px"></textarea></div>`}
+function jTxt(j){return `📅 *Jadwal Tenis TIC*\n${hari(j.tgl)}\n🕖 ${wkt(j.jam)}\n📍 ${j.tempat||"-"}\n`+(j.cat?j.cat+"\n":"")+`\n👥 *Peserta (${j.peserta.length})*\n`+j.peserta.map((n,k)=>`${k+1}. ${n}`).join("\n")}
+function copyJ(i){const t=jTxt(D.jadwal[i]),ta=document.getElementById("tj"+i),c=document.getElementById("cj"+i);ta.style.display="block";ta.value=t;ta.select();
+  try{navigator.clipboard.writeText(t).then(()=>c.textContent="Tersalin. Tempel di WhatsApp.",()=>c.textContent="Salin manual dari kotak di bawah.")}catch(e){c.textContent="Salin manual dari kotak di bawah."}}
+function admJ(){const j=EDJ!=null?D.jadwal[EDJ]:{tgl:TODAY,jam:"07:00",tempat:"",cat:"",peserta:[]};
+const mem=[...D.members].sort((a,b)=>a.localeCompare(b,"id")).map(n=>`<label style="display:flex;gap:6px;align-items:center;color:var(--tx);font-size:14px;margin:0"><input type="checkbox" class="pj" value="${esc(n)}" style="width:auto"${j.peserta.includes(n)?" checked":""}>${esc(n)}</label>`).join("");
+const list=D.jadwal.map((x,i)=>[x,i]).sort((a,b)=>(b[0].tgl+b[0].jam).localeCompare(a[0].tgl+a[0].jam)).map(([x,i])=>`<tr><td>${esc(hari(x.tgl))}, ${esc(wkt(x.jam))}</td><td>${esc(x.tempat||"-")}</td><td class="n">${x.peserta.length}</td><td><button class="btn g" onclick="editJ(${i})">Edit</button> <button class="btn g" onclick="delJ(${i})" style="${CONFJ===i?"color:#c0392b;border-color:#c0392b":""}">${CONFJ===i?"Yakin? Klik lagi":"Hapus"}</button></td></tr>`).join("");
+return `<div class="card"><h2>${EDJ!=null?"Edit Jadwal":"Tambah Jadwal Pertandingan"}</h2><div class="grid"><div><label>Tanggal</label><input type="date" id="jt" value="${j.tgl}"></div><div><label>Jam mulai</label><input type="time" id="jj" value="${j.jam}"></div></div><div style="margin-top:10px"><label>Tempat</label><input id="jp" value="${esc(j.tempat)}" placeholder="Nama lapangan / alamat"></div><div style="margin-top:10px"><label>Catatan (opsional)</label><input id="jc" value="${esc(j.cat)}" placeholder="mis. bawa bola sendiri"></div><div style="margin-top:10px"><label>Peserta (centang yang ikut)</label><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))">${mem}</div></div><p class="err" id="erj"></p><button class="btn" onclick="saveJ()">${EDJ!=null?"Simpan perubahan":"Simpan jadwal"}</button>${EDJ!=null?' <button class="btn g" onclick="EDJ=null;view()">Batal</button>':""}</div>${list?`<div class="card"><h2>Daftar Jadwal</h2><div class="sc"><table><tr><th>Waktu</th><th>Tempat</th><th class="n">Peserta</th><th></th></tr>${list}</table></div></div>`:""}`}
+function admRen(){const o=[...D.members].sort((a,b)=>a.localeCompare(b,"id")).map(n=>`<option>${esc(n)}</option>`).join("");
+return `<div class="card"><h2>Edit Nama Anggota</h2><div class="grid"><div><label>Nama saat ini</label><select id="rn0"><option value="">Pilih…</option>${o}</select></div><div><label>Nama baru</label><input id="rn1" placeholder="Nama baru"></div></div><p class="err" id="er2"></p><button class="btn" onclick="renP()">Simpan nama</button><p class="mu" style="font-size:12px;margin:8px 0 0">Nama diganti di semua pertandingan, jadwal, dan daftar pengurus.</p></div>`}
+function saveJ(){const g=id=>document.getElementById(id).value,er=document.getElementById("erj"),t=g("jt"),jam=g("jj"),pes=[...document.querySelectorAll(".pj:checked")].map(x=>x.value);
+if(!t)return er.textContent="Isi tanggal.";if(!jam)return er.textContent="Isi jam mulai.";if(!g("jp").trim())return er.textContent="Isi tempat pertandingan.";
+const o={tgl:t,jam,tempat:g("jp").trim(),cat:g("jc").trim(),peserta:pes};if(EDJ!=null){D.jadwal[EDJ]=o;EDJ=null}else D.jadwal.push(o);commit()}
+function editJ(i){EDJ=i;view();window.scrollTo(0,0)}
+function delJ(i){if(CONFJ!==i){CONFJ=i;view();setTimeout(()=>{if(CONFJ===i){CONFJ=null;view()}},4000);return}CONFJ=null;D.jadwal.splice(i,1);commit()}
+function editM(i){EDM=i;tab="adm";view();window.scrollTo(0,0)}
+function renP(){const o=document.getElementById("rn0").value,n=document.getElementById("rn1").value.trim(),er=document.getElementById("er2");
+if(!o||!n)return er.textContent="Pilih nama dan isi nama baru.";
+if(n.toLowerCase()!==o.toLowerCase()&&D.members.some(x=>x.toLowerCase()===n.toLowerCase()))return er.textContent="Nama sudah dipakai anggota lain.";
+const f=x=>x===o?n:x;D.members=D.members.map(f);D.admins=D.admins.map(f);D.matches=D.matches.map(m=>m.map((v,i)=>i>=1&&i<=4?f(v):v));D.jadwal.forEach(j=>j.peserta=j.peserta.map(f));commit()}
+const APP_URL=location.href.split("#")[0];
+function openWA(t){const w=window.open("https://wa.me/?text="+encodeURIComponent(t),"_blank","noopener");if(!w)copyLink()}
+function shareApp(){const t="🎾 *TIC · Peringkat Tenis*\nLihat peringkat, jadwal, dan hasil pertandingan terbaru:\n"+APP_URL;
+  if(navigator.share){try{navigator.share({title:"TIC · Peringkat Tenis",text:t}).catch(e=>{if(!e||e.name!=="AbortError")openWA(t)});return}catch(e){}}
+  openWA(t)}
+function copyLink(){const b=document.getElementById("shr");if(!b)return;b.innerHTML=`<div class="note"><b>Tautan TIC</b> <span id="lkm" class="mu"></span><input readonly id="lk" value="${APP_URL}" onclick="this.select()" style="margin-top:6px"></div>`;const i=document.getElementById("lk");i.select();
+  try{navigator.clipboard.writeText(APP_URL).then(()=>{document.getElementById("lkm").textContent="· Tersalin"},()=>{document.getElementById("lkm").textContent="· Salin manual dari kotak"})}catch(e){}}
+function toast(t){const d=document.createElement("div");d.textContent=t;d.style.cssText="position:fixed;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#0f2a43;color:#fff;padding:12px 14px;border-radius:10px;z-index:9;font-size:14px";document.body.appendChild(d);setTimeout(()=>d.remove(),5000)}
+const API_URL="GANTI_DENGAN_URL_APPS_SCRIPT";
+let CODE=null;try{CODE=localStorage.getItem("tic-code")}catch(e){}
+const cache=d=>{try{localStorage.setItem("tic-data",JSON.stringify(d))}catch(e){}};
+function setData(d){D=Object.assign({members:[],matches:[],jadwal:[],admins:[]},d)}
+async function api(b){const r=await fetch(b?API_URL:API_URL+"?action=data",b?{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(b)}:{});return r.json()}
+async function loadData(quiet){
+  try{const d=await api();if(d.error)throw 0;if(quiet&&d.v===D.v)return;
+    const ty=document.activeElement&&/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName);
+    if(quiet&&(tab==="adm"||ty))return;setData(d);cache(d);view()}
+  catch(e){if(!quiet)toast("Tidak bisa memuat data terbaru. Menampilkan data tersimpan.")}}
+async function commit(){
+  if(!CODE)return toast("Masuk sebagai admin dulu (tombol 🔑 Admin).");
+  try{const r=await api({action:"simpan",code:CODE,v:D.v,data:{members:D.members,matches:D.matches,jadwal:D.jadwal,admins:D.admins}});
+    if(r.error==="kode"){toast("Kode admin salah.");return logoutA()}
+    if(r.error==="versi"){toast("Admin lain menyimpan lebih dulu. Data dimuat ulang, ulangi perubahan Anda.");EDM=null;EDJ=null;return loadData(false)}
+    if(r.error)return toast("Gagal menyimpan: "+r.error);
+    setData(r);cache(r);EDM=null;EDJ=null;view();toast("Tersimpan.")}
+  catch(e){toast("Gagal menyimpan. Periksa koneksi internet.")}}
+async function loginA(){const c=prompt("Masukkan kode admin TIC");if(!c)return;
+  try{const r=await api({action:"cek",code:c.trim()});if(r.ok){CODE=c.trim();try{localStorage.setItem("tic-code",CODE)}catch(e){}ADMIN=true;view();toast("Masuk sebagai admin.")}else toast("Kode admin salah.")}catch(e){toast("Tidak bisa memeriksa kode. Periksa koneksi.")}}
+function logoutA(){CODE=null;ADMIN=false;try{localStorage.removeItem("tic-code")}catch(e){}tab="rank";view()}
+function addM(){
+  const p=[0,1,2,3].map(i=>document.getElementById("p"+i).value),sa=document.getElementById("sa").value,sb=document.getElementById("sb").value,dt=document.getElementById("dt").value,er=document.getElementById("er");
+  if(p.some(x=>!x))return er.textContent="Pilih keempat pemain.";if(new Set(p).size<4)return er.textContent="Keempat pemain harus berbeda.";
+  if(!/^\d+$/.test(sa)||!/^\d+$/.test(sb))return er.textContent="Skor harus bilangan bulat 0 atau lebih.";
+  const a=+sa,b=+sb;if(a>9||b>9)return er.textContent="Skor maksimum 9. Periksa salah ketik.";if(a+b===0)return er.textContent="Skor 0-0 tidak valid.";if(!dt)return er.textContent="Isi tanggal.";
+  const row=[dt,p[0],p[1],p[2],p[3],a,b];if(EDM!=null){D.matches[EDM]=row;EDM=null}else D.matches.push(row);commit()}
+let CONF=null;function delM(i){if(CONF!==i){CONF=i;view();setTimeout(()=>{if(CONF===i){CONF=null;view()}},4000);return}CONF=null;D.matches.splice(i,1);commit()}
+function addP(){const n=document.getElementById("nm").value.trim();if(!n||D.members.some(x=>x.toLowerCase()===n.toLowerCase()))return;D.members.push(n);commit()}
+function addA(){const n=document.getElementById("ad").value;if(!n||D.admins.includes(n))return;D.admins.push(n);commit()}
+function rmA(n){D.admins=D.admins.filter(x=>x!==n);commit()}
+function clearDemo(){D.matches=[];D.demo=false;commit()}
+(function(){try{const c=localStorage.getItem("tic-data");if(c)setData(JSON.parse(c))}catch(e){}
+ADMIN=!!CODE;view();loadData(false);
+setInterval(()=>{if(!document.hidden)loadData(true)},60000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)loadData(true)});
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{})})();
+</script>
+</body></html>
