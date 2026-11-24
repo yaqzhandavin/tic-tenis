@@ -56,12 +56,12 @@ let D=JSON.parse(document.getElementById("data").textContent),tab="rank",ADMIN=f
 const NOW=new Date(),MON=NOW.getFullYear()+"-"+String(NOW.getMonth()+1).padStart(2,"0"),TODAY=MON+"-"+String(NOW.getDate()).padStart(2,"0");
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function compute(){
-  const P={};D.members.forEach(n=>P[n]={n,r:1000,m:0,w:0,s:0,k:0,gf:0,ga:0,last:null,d:0,pts:0,pm:0,days:{},form:[]});
+  const P={};D.members.forEach(n=>P[n]={n,r:1000,m:0,w:0,s:0,k:0,gf:0,ga:0,last:null,d:0,pts:0,pm:0,days:{},form:[],dd:{}});
   const ms=D.matches.map((m,i)=>({i,date:m[0],a:[m[1],m[2]],b:[m[3],m[4]],sa:m[5],sb:m[6]})).sort((x,y)=>x.date.localeCompare(y.date)||x.i-y.i);
   for(const m of ms){
     const A=m.a.map(n=>P[n]),B=m.b.map(n=>P[n]);if([...A,...B].some(p=>!p))continue;
     const ra=(A[0].r+A[1].r)/2,rb=(B[0].r+B[1].r)/2,ea=1/(1+Math.pow(10,(rb-ra)/400)),M=1+Math.abs(m.sa-m.sb)/(m.sa+m.sb),sa=m.sa>m.sb?1:m.sa===m.sb?.5:0;
-    const run=(T,e,s,gf,ga)=>T.forEach(p=>{const K=p.m<10?40:24,d=K*M*(s-e);p.r+=d;p.d=d;p.m++;
+    const run=(T,e,s,gf,ga)=>T.forEach(p=>{const K=p.m<10?40:24,d=K*M*(s-e);p.r+=d;p.d=d;p.dd[m.date]=(p.dd[m.date]||0)+d;p.m++;
       s===1?p.w++:s===.5?p.s++:p.k++;p.form.push(s===1?"M":s===.5?"S":"K");p.gf+=gf;p.ga+=ga;p.last=m.date;p.pts++;
       p.days[m.date]=(p.days[m.date]||0)+1;if(m.date.startsWith(MON))p.pm++});
     run(A,ea,sa,m.sa,m.sb);run(B,1-ea,1-sa,m.sb,m.sa);
@@ -76,7 +76,7 @@ function view(){const fo=document.querySelector("footer");if(fo&&D.updated)fo.te
   const act=[...pl].sort((a,b)=>b.pm-a.pm||b.pts-a.pts||a.n.localeCompare(b.n));
   const last=D.matches.reduce((x,m)=>m[0]>x?m[0]:x,"");
   document.getElementById("upd").textContent=last?"Update terakhir: "+new Date(last+"T00:00:00").toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"}):"Belum ada data";
-  const tabs=[["rank","Peringkat"],["jad","Jadwal"],["act","Keaktifan"],["hist","Pertandingan"]];if(ADMIN)tabs.push(["adm","⚙ Admin"]);
+  const tabs=[["rank","Peringkat"],["hari","Harian"],["jad","Jadwal"],["act","Keaktifan"],["hist","Pertandingan"]];if(ADMIN)tabs.push(["adm","⚙ Admin"]);
   let h=D.demo?`<div class="note"><b>Data contoh.</b> Nama dan hasil di bawah hanya ilustrasi.${ADMIN?" Buka tab Admin untuk mulai dengan data nyata.":""}</div>`:"";
   h+=`<div style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:10px;flex-wrap:wrap"><button class="btn wa" onclick="shareApp()">📤 Bagikan ke WhatsApp</button><button class="btn g" onclick="copyLink()">Salin tautan</button></div><div id="shr"></div>`;
   h+=`<div class="kpi"><div class="k"><b>${pl.length}</b><span>Pemain berperingkat</span></div><div class="k"><b>${D.matches.length}</b><span>Pertandingan</span></div><div class="k"><b>${none.length}</b><span>Belum bertanding</span></div><div class="k"><b>${pl.length?Math.round(pl[0].r):"–"}</b><span>Rating tertinggi</span></div></div>`;
@@ -91,6 +91,7 @@ function view(){const fo=document.querySelector("footer");if(fo&&D.updated)fo.te
     shareTxt=`🎾 *TIC · Peringkat Tenis*\n${NOW.toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"})}\n\n🏆 *Top 5 Hasil Pertandingan*\n`+pl.slice(0,5).map((p,i)=>`${i+1}. ${p.n} – ${Math.round(p.r)}`).join("\n")+`\n\n🔥 *Paling Rajin Bulan Ini*\n`+act.filter(p=>p.pm).slice(0,5).map((p,i)=>`${i+1}. ${p.n} – ${p.pm} poin`).join("\n")+(none.length?`\n\n👟 ${none.length} anggota belum bertanding. Yuk main!`:"");
     h+=`<div class="card"><h2>Bagikan ke WhatsApp</h2><button class="btn wa" onclick="copyShare()">Salin rekap untuk WhatsApp</button> <span id="cm" class="mu" style="font-size:13px"></span><textarea id="sh" rows="8" style="margin-top:10px;display:none" readonly></textarea></div>`;
   }
+  if(tab==="hari")h+=harian(P);
   if(tab==="jad"){const u=upc();h+=u.length?u.map((j,k)=>jCard(j,k===0)).join(""):`<div class="card"><h2>📅 Jadwal</h2><p class="mu" style="margin:0">Belum ada jadwal pertandingan.${ADMIN?" Tambahkan di tab Admin.":""}</p></div>`}
   if(tab==="act")h+=`<div class="card"><h2>Peringkat Keaktifan</h2><div class="sc"><table><tr><th>#</th><th>Nama</th><th class="n">Poin bulan ini</th><th class="n">Poin total</th><th class="n">Pertandingan</th></tr>`+act.map((p,i)=>`<tr class="${i<3&&p.pm?"top":""}"><td>${i+1}</td><td>${esc(p.n)}</td><td class="n"><b>${p.pm}</b></td><td class="n">${p.pts}</td><td class="n">${p.m}</td></tr>`).join("")+`</table></div><p class="mu" style="font-size:12px;margin:8px 0 0">+1 tiap pertandingan, +2 bonus untuk hari bermain minimal 2 pertandingan. Tidak memengaruhi rating; dasar reward Pemain Paling Rajin.</p></div>`;
   if(tab==="hist")h+=`<div class="card"><h2>Riwayat Pertandingan</h2><div class="sc"><table><tr><th>Tanggal</th><th>Tim A</th><th class="n">Skor</th><th>Tim B</th>${ADMIN?"<th></th>":""}</tr>`+
@@ -137,8 +138,26 @@ function shareApp(){const t="🎾 *TIC · Peringkat Tenis*\nLihat peringkat, jad
   openWA(t)}
 function copyLink(){const b=document.getElementById("shr");if(!b)return;b.innerHTML=`<div class="note"><b>Tautan TIC</b> <span id="lkm" class="mu"></span><input readonly id="lk" value="${APP_URL}" onclick="this.select()" style="margin-top:6px"></div>`;const i=document.getElementById("lk");i.select();
   try{navigator.clipboard.writeText(APP_URL).then(()=>{document.getElementById("lkm").textContent="· Tersalin"},()=>{document.getElementById("lkm").textContent="· Salin manual dari kotak"})}catch(e){}}
+let HARI=null;
+function harian(P){
+  const ds=[...new Set(D.matches.map(m=>m[0]))].sort().reverse();
+  if(!ds.length)return `<div class="card"><h2>📅 Peringkat Harian</h2><p class="mu" style="margin:0">Belum ada pertandingan.</p></div>`;
+  if(!HARI||!ds.includes(HARI))HARI=ds[0];
+  const ms=D.matches.filter(m=>m[0]===HARI),S={};
+  const add=(n,gf,ga)=>{const x=S[n]||(S[n]={n,m:0,w:0,s:0,k:0,gf:0,ga:0});x.m++;x.gf+=gf;x.ga+=ga;if(gf>ga)x.w++;else if(gf===ga)x.s++;else x.k++};
+  ms.forEach(m=>{[m[1],m[2]].forEach(n=>add(n,m[5],m[6]));[m[3],m[4]].forEach(n=>add(n,m[6],m[5]))});
+  const L=Object.values(S).map(x=>({...x,pt:3*x.w+x.s,sel:x.gf-x.ga,pct:(x.w+.5*x.s)/x.m,dr:(P[x.n]&&P[x.n].dd[HARI])||0}))
+    .sort((a,b)=>b.pt-a.pt||b.sel-a.sel||b.gf-a.gf||a.n.localeCompare(b.n));
+  L.forEach((x,i)=>{x.r=i&&x.pt===L[i-1].pt&&x.sel===L[i-1].sel&&x.gf===L[i-1].gf?L[i-1].r:i+1});
+  const opt=ds.map(d=>`<option value="${d}"${d===HARI?" selected":""}>${esc(hari(d))}</option>`).join("");
+  shareTxt=`🎾 *TIC · Peringkat Harian*\n${hari(HARI)}\n(Menang 3 · Seri 1 · Kalah 0)\n\n`+L.map(x=>`${x.r}. ${x.n} – ${x.pt} poin (${x.w}M-${x.s}S-${x.k}K)`).join("\n");
+  return `<div class="card"><h2>📅 Peringkat Harian</h2><div style="max-width:320px;margin-bottom:10px"><label>Pilih hari pertandingan</label><select onchange="HARI=this.value;view()">${opt}</select></div><div class="sc"><table><tr><th>#</th><th>Nama</th><th class="n">Main</th><th class="n">M-S-K</th><th class="n">Poin</th><th class="n">Selisih game</th><th class="n">% Menang</th><th class="n">Δ Rating</th></tr>`+
+  L.map(x=>`<tr class="${x.r<=3?"top":""}"><td>${x.r}</td><td>${esc(x.n)}</td><td class="n">${x.m}</td><td class="n">${x.w}-${x.s}-${x.k}</td><td class="n"><b>${x.pt}</b></td><td class="n">${x.sel>0?"+":""}${x.sel}</td><td class="n">${Math.round(x.pct*100)}%</td><td class="n ${x.dr>.5?"up":x.dr<-.5?"dn":"mu"}">${x.dr>.5?"▲ +":x.dr<-.5?"▼ -":"– "}${Math.abs(Math.round(x.dr))}</td></tr>`).join("")+
+  `</table></div><p class="mu" style="font-size:12px;margin:8px 0 0">Poin: menang 3, seri 1, kalah 0. Urutan: poin, selisih game, game menang, nama. Δ Rating = perubahan rating pada hari itu.</p></div>`+
+  `<div class="card"><h2>Hasil hari ini (${ms.length} pertandingan)</h2><div class="sc"><table>`+ms.map(m=>`<tr><td>${esc(m[1])} &amp; ${esc(m[2])}</td><td class="n"><b>${m[5]}-${m[6]}</b></td><td>${esc(m[3])} &amp; ${esc(m[4])}</td></tr>`).join("")+`</table></div></div>`+
+  `<div class="card"><h2>Bagikan ke WhatsApp</h2><button class="btn wa" onclick="copyShare()">Salin rekap hari ini</button> <span id="cm" class="mu" style="font-size:13px"></span><textarea id="sh" rows="8" style="margin-top:10px;display:none" readonly></textarea></div>`}
 function toast(t){const d=document.createElement("div");d.textContent=t;d.style.cssText="position:fixed;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#0f2a43;color:#fff;padding:12px 14px;border-radius:10px;z-index:9;font-size:14px";document.body.appendChild(d);setTimeout(()=>d.remove(),5000)}
-const API_URL="https://script.google.com/macros/s/AKfycbwziEJEjU8-LG-6Hbn5xSSeBrz3Xqn7Ab_P6qtCSmiDIXFIP4nEmXI9CgNdSWOn7I35/exec";
+const API_URL="GANTI_DENGAN_URL_APPS_SCRIPT";
 let CODE=null;try{CODE=localStorage.getItem("tic-code")}catch(e){}
 const cache=d=>{try{localStorage.setItem("tic-data",JSON.stringify(d))}catch(e){}};
 function setData(d){D=Object.assign({members:[],matches:[],jadwal:[],admins:[]},d)}
