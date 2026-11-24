@@ -138,7 +138,7 @@ function shareApp(){const t="🎾 *TIC · Peringkat Tenis*\nLihat peringkat, jad
 function copyLink(){const b=document.getElementById("shr");if(!b)return;b.innerHTML=`<div class="note"><b>Tautan TIC</b> <span id="lkm" class="mu"></span><input readonly id="lk" value="${APP_URL}" onclick="this.select()" style="margin-top:6px"></div>`;const i=document.getElementById("lk");i.select();
   try{navigator.clipboard.writeText(APP_URL).then(()=>{document.getElementById("lkm").textContent="· Tersalin"},()=>{document.getElementById("lkm").textContent="· Salin manual dari kotak"})}catch(e){}}
 function toast(t){const d=document.createElement("div");d.textContent=t;d.style.cssText="position:fixed;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#0f2a43;color:#fff;padding:12px 14px;border-radius:10px;z-index:9;font-size:14px";document.body.appendChild(d);setTimeout(()=>d.remove(),5000)}
-const API_URL="GANTI_DENGAN_URL_APPS_SCRIPT";
+const API_URL="https://script.google.com/macros/s/AKfycbwziEJEjU8-LG-6Hbn5xSSeBrz3Xqn7Ab_P6qtCSmiDIXFIP4nEmXI9CgNdSWOn7I35/exec";
 let CODE=null;try{CODE=localStorage.getItem("tic-code")}catch(e){}
 const cache=d=>{try{localStorage.setItem("tic-data",JSON.stringify(d))}catch(e){}};
 function setData(d){D=Object.assign({members:[],matches:[],jadwal:[],admins:[]},d)}
