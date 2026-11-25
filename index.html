@@ -150,14 +150,14 @@ function harian(P){
     .sort((a,b)=>b.pt-a.pt||b.sel-a.sel||b.gf-a.gf||a.n.localeCompare(b.n));
   L.forEach((x,i)=>{x.r=i&&x.pt===L[i-1].pt&&x.sel===L[i-1].sel&&x.gf===L[i-1].gf?L[i-1].r:i+1});
   const opt=ds.map(d=>`<option value="${d}"${d===HARI?" selected":""}>${esc(hari(d))}</option>`).join("");
-  shareTxt=`🎾 *TIC · Peringkat Harian*\n${hari(HARI)}\n(Menang 3 · Seri 1 · Kalah 0)\n\n`+L.map(x=>`${x.r}. ${x.n} – ${x.pt} poin (${x.w}M-${x.s}S-${x.k}K)`).join("\n");
+  shareTxt=`🎾 *TIC · Rekap Harian*\n${hari(HARI)}\n\n📋 *Hasil Pertandingan*\n`+ms.map((m,i)=>`${i+1}. ${m[1]} & ${m[2]} ${m[5]}-${m[6]} ${m[3]} & ${m[4]}`).join("\n")+`\n\n🏆 *Peringkat Harian*\n(Menang 3 · Seri 1 · Kalah 0)\n`+L.map(x=>`${x.r}. ${x.n} – ${x.pt} poin (${x.w}M-${x.s}S-${x.k}K)`).join("\n");
   return `<div class="card"><h2>📅 Peringkat Harian</h2><div style="max-width:320px;margin-bottom:10px"><label>Pilih hari pertandingan</label><select onchange="HARI=this.value;view()">${opt}</select></div><div class="sc"><table><tr><th>#</th><th>Nama</th><th class="n">Main</th><th class="n">M-S-K</th><th class="n">Poin</th><th class="n">Selisih game</th><th class="n">% Menang</th><th class="n">Δ Rating</th></tr>`+
   L.map(x=>`<tr class="${x.r<=3?"top":""}"><td>${x.r}</td><td>${esc(x.n)}</td><td class="n">${x.m}</td><td class="n">${x.w}-${x.s}-${x.k}</td><td class="n"><b>${x.pt}</b></td><td class="n">${x.sel>0?"+":""}${x.sel}</td><td class="n">${Math.round(x.pct*100)}%</td><td class="n ${x.dr>.5?"up":x.dr<-.5?"dn":"mu"}">${x.dr>.5?"▲ +":x.dr<-.5?"▼ -":"– "}${Math.abs(Math.round(x.dr))}</td></tr>`).join("")+
   `</table></div><p class="mu" style="font-size:12px;margin:8px 0 0">Poin: menang 3, seri 1, kalah 0. Urutan: poin, selisih game, game menang, nama. Δ Rating = perubahan rating pada hari itu.</p></div>`+
   `<div class="card"><h2>Hasil hari ini (${ms.length} pertandingan)</h2><div class="sc"><table>`+ms.map(m=>`<tr><td>${esc(m[1])} &amp; ${esc(m[2])}</td><td class="n"><b>${m[5]}-${m[6]}</b></td><td>${esc(m[3])} &amp; ${esc(m[4])}</td></tr>`).join("")+`</table></div></div>`+
   `<div class="card"><h2>Bagikan ke WhatsApp</h2><button class="btn wa" onclick="copyShare()">Salin rekap hari ini</button> <span id="cm" class="mu" style="font-size:13px"></span><textarea id="sh" rows="8" style="margin-top:10px;display:none" readonly></textarea></div>`}
 function toast(t){const d=document.createElement("div");d.textContent=t;d.style.cssText="position:fixed;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#0f2a43;color:#fff;padding:12px 14px;border-radius:10px;z-index:9;font-size:14px";document.body.appendChild(d);setTimeout(()=>d.remove(),5000)}
-const API_URL="https://script.google.com/macros/s/AKfycbwziEJEjU8-LG-6Hbn5xSSeBrz3Xqn7Ab_P6qtCSmiDIXFIP4nEmXI9CgNdSWOn7I35/exec";
+const API_URL="GANTI_DENGAN_URL_APPS_SCRIPT";
 let CODE=null;try{CODE=localStorage.getItem("tic-code")}catch(e){}
 const cache=d=>{try{localStorage.setItem("tic-data",JSON.stringify(d))}catch(e){}};
 function setData(d){D=Object.assign({members:[],matches:[],jadwal:[],admins:[]},d)}
