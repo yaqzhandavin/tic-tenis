@@ -76,13 +76,64 @@ function simpan_(d) {
   P.setProperty('ADM', JSON.stringify(d.admins || []));
 }
 
+// Hapus otomatis jadwal yang tanggalnya sudah lewat
+function bersihkanJadwal_() {
+  const js = SpreadsheetApp.getActive().getSheetByName('Jadwal');
+  if (!js || js.getLastRow() < 2) return;
+  const today = Utilities.formatDate(new Date(), tz_(), 'yyyy-MM-dd');
+  const rows = js.getRange(2, 1, js.getLastRow() - 1, 8).getValues().filter(r => r[1] !== '' && r[1] !== null);
+  const keep = rows.filter(r => ymd_(r[1]) >= today);
+  if (keep.length === rows.length) return;
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    js.getRange('B2:E200').clearContent();
+    js.getRange('G2:G200').clearContent();
+    if (keep.length) {
+      js.getRange(2, 2, keep.length, 4).setValues(keep.map(r => [r[1], r[2], r[3], r[4]]));
+      js.getRange(2, 2, keep.length, 1).setNumberFormat('dd-mmm-yyyy');
+      js.getRange(2, 7, keep.length, 1).setValues(keep.map(r => [r[6]]));
+      if (keep.length > 1) ['A', 'F', 'H'].forEach(c =>
+        js.getRange(c + '2').copyTo(js.getRange(c + '3:' + c + (keep.length + 1)), SpreadsheetApp.CopyPasteType.PASTE_FORMULA, false));
+    }
+  } finally { lock.releaseLock(); }
+}
+
+// Anggota mendaftar atau membatalkan diri sendiri pada sebuah jadwal (tanpa kode admin)
+function ikut_(b) {
+  const ss = SpreadsheetApp.getActive();
+  const nama = String(b.nama || '').trim();
+  const mem = ss.getSheetByName('Anggota').getRange('A2:A201').getValues().flat().map(s => String(s).trim());
+  if (!nama || mem.indexOf(nama) < 0) return { error: 'nama tidak dikenal' };
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const js = ss.getSheetByName('Jadwal');
+    if (!js || js.getLastRow() < 2) return { error: 'jadwal tidak ditemukan' };
+    const rows = js.getRange(2, 1, js.getLastRow() - 1, 8).getValues();
+    const idx = rows.findIndex(r => ymd_(r[1]) === b.tgl &&
+      String(r[2]).replace(/\s*WIB/i, '').replace('.', ':').trim() === b.jam &&
+      String(r[3]) === String(b.tempat || ''));
+    if (idx < 0) return { error: 'jadwal tidak ditemukan' };
+    let p = String(rows[idx][6]).split(',').map(s => s.trim()).filter(Boolean);
+    const ada = p.indexOf(nama) >= 0;
+    if (b.ikut && !ada) p.push(nama);
+    if (!b.ikut && ada) p = p.filter(x => x !== nama);
+    js.getRange(idx + 2, 7).setValue(p.join(', '));
+    return baca_();
+  } finally { lock.releaseLock(); }
+}
+
 function doGet(e) {
+  bersihkanJadwal_();
   return out_(baca_());
 }
 
 function doPost(e) {
   let b;
   try { b = JSON.parse(e.postData.contents); } catch (x) { return out_({ error: 'format' }); }
+  bersihkanJadwal_();
+  if (b.action === 'ikut') return out_(ikut_(b));
   if (b.code !== KODE_API) return out_({ error: 'kode' });
   if (b.action === 'cek') return out_({ ok: true });
   if (b.action !== 'simpan') return out_({ error: 'aksi' });
