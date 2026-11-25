@@ -76,12 +76,12 @@ function view(){const fo=document.querySelector("footer");if(fo&&D.updated)fo.te
   const act=[...pl].sort((a,b)=>b.pm-a.pm||b.pts-a.pts||a.n.localeCompare(b.n));
   const last=D.matches.reduce((x,m)=>m[0]>x?m[0]:x,"");
   document.getElementById("upd").textContent=last?"Update terakhir: "+new Date(last+"T00:00:00").toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"}):"Belum ada data";
-  const tabs=[["rank","Peringkat"],["hari","Harian"],["jad","Jadwal"],["act","Keaktifan"],["hist","Pertandingan"]];if(ADMIN)tabs.push(["adm","⚙ Admin"]);
+  const tabs=[["rank","Peringkat"],["hari","Harian"],["jad","Jadwal"],["act","Keaktifan"],["atur","Aturan"],["hist","Pertandingan"]];if(ADMIN)tabs.push(["adm","⚙ Admin"]);
   let h=D.demo?`<div class="note"><b>Data contoh.</b> Nama dan hasil di bawah hanya ilustrasi.${ADMIN?" Buka tab Admin untuk mulai dengan data nyata.":""}</div>`:"";
   h+=`<div style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:10px;flex-wrap:wrap"><button class="btn wa" onclick="shareApp()">📤 Bagikan ke WhatsApp</button><button class="btn g" onclick="copyLink()">Salin tautan</button></div><div id="shr"></div>`;
   h+=`<div class="kpi"><div class="k"><b>${pl.length}</b><span>Pemain berperingkat</span></div><div class="k"><b>${D.matches.length}</b><span>Pertandingan</span></div><div class="k"><b>${none.length}</b><span>Belum bertanding</span></div><div class="k"><b>${pl.length?Math.round(pl[0].r):"–"}</b><span>Rating tertinggi</span></div></div>`;
   h+=`<nav>${tabs.map(([k,l])=>`<button class="${tab===k?"on":""}" onclick="tab='${k}';view()">${l}</button>`).join("")}${ADMIN?'<button onclick="logoutA()">Keluar admin</button>':'<button onclick="loginA()">🔑 Admin</button>'}</nav>`;
-  if(tab==="rank"){{const u=upc();if(u.length)h+=jCard(u[0],true)}
+  if(tab==="rank"){{const u=upc();if(u.length)h+=jCard(u[0],true)}h+=`<div class="note">ℹ️ <b>Cara mendapatkan poin dan peringkat:</b> menang, seri, dan skor memengaruhi rating; main rutin menambah poin keaktifan. <a href="#" onclick="tab='atur';view();window.scrollTo(0,0);return false"><b>Lihat tata cara penilaian →</b></a></div>`;
     if(pl.length>=3){const o=[[1,"b2"],[0,"b1"],[2,"b3"]];h+=`<div class="card"><h2>🏆 Podium</h2><div class="pod">`+o.map(([i,c])=>`<div class="pc"><div class="nm">${esc(pl[i].n)}</div><div class="rt">${Math.round(pl[i].r)}</div><div class="bl ${c}">${i+1}</div></div>`).join("")+`</div></div>`}
     const mx=pl.length?pl[0].r:1000,mn=pl.length?pl[pl.length-1].r:1000;
     h+=`<div class="card"><h2>Peringkat Hasil Pertandingan</h2><div class="sc"><table><tr><th>#</th><th>Nama</th><th class="n">Rating</th><th class="n">Δ</th><th>Form</th><th class="n">Main</th><th class="n">M-S-K</th><th class="n">% Menang</th><th class="n">Selisih game</th></tr>`+
@@ -91,6 +91,7 @@ function view(){const fo=document.querySelector("footer");if(fo&&D.updated)fo.te
     shareTxt=`🎾 *TIC · Peringkat Tenis*\n${NOW.toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"})}\n\n🏆 *Top 5 Hasil Pertandingan*\n`+pl.slice(0,5).map((p,i)=>`${i+1}. ${p.n} – ${Math.round(p.r)}`).join("\n")+`\n\n🔥 *Paling Rajin Bulan Ini*\n`+act.filter(p=>p.pm).slice(0,5).map((p,i)=>`${i+1}. ${p.n} – ${p.pm} poin`).join("\n")+(none.length?`\n\n👟 ${none.length} anggota belum bertanding. Yuk main!`:"");
     h+=`<div class="card"><h2>Bagikan ke WhatsApp</h2><button class="btn wa" onclick="copyShare()">Salin rekap untuk WhatsApp</button> <span id="cm" class="mu" style="font-size:13px"></span><textarea id="sh" rows="8" style="margin-top:10px;display:none" readonly></textarea></div>`;
   }
+  if(tab==="atur")h+=aturan();
   if(tab==="hari")h+=harian(P);
   if(tab==="jad"){const u=upc();h+=u.length?u.map((j,k)=>jCard(j,k===0)).join(""):`<div class="card"><h2>📅 Jadwal</h2><p class="mu" style="margin:0">Belum ada jadwal pertandingan.${ADMIN?" Tambahkan di tab Admin.":""}</p></div>`}
   if(tab==="act")h+=`<div class="card"><h2>Peringkat Keaktifan</h2><div class="sc"><table><tr><th>#</th><th>Nama</th><th class="n">Poin bulan ini</th><th class="n">Poin total</th><th class="n">Pertandingan</th></tr>`+act.map((p,i)=>`<tr class="${i<3&&p.pm?"top":""}"><td>${i+1}</td><td>${esc(p.n)}</td><td class="n"><b>${p.pm}</b></td><td class="n">${p.pts}</td><td class="n">${p.m}</td></tr>`).join("")+`</table></div><p class="mu" style="font-size:12px;margin:8px 0 0">+1 tiap pertandingan, +2 bonus untuk hari bermain minimal 2 pertandingan. Tidak memengaruhi rating; dasar reward Pemain Paling Rajin.</p></div>`;
@@ -164,8 +165,38 @@ async function rsvp(i,add){const n=document.getElementById("me"+i).value;if(!n)r
   try{const r=await api({action:"ikut",tgl:j.tgl,jam:j.jam,tempat:j.tempat,nama:n,ikut:add});
     if(r.error)return toast("Gagal: "+r.error);setData(r);cache(r);view();toast(add?"Anda terdaftar ikut.":"Pendaftaran dibatalkan.")}
   catch(e){toast("Gagal menyimpan. Periksa koneksi internet.")}}
+function aturan(){
+ const ul=a=>`<ul style="margin:0;padding-left:20px;line-height:1.6">${a.map(x=>`<li>${x}</li>`).join("")}</ul>`;
+ const row=(a,b,c)=>`<tr><td>${a}</td><td class="n up">${b}</td><td class="n dn">${c}</td></tr>`;
+ return `<div class="card"><h2>🎾 Cara Kerja Peringkat Hasil Pertandingan</h2>`+ul([
+ "Semua anggota mulai dari <b>rating 1000</b>. Pemain masuk tabel Peringkat setelah bermain <b>minimal 1 pertandingan</b>.",
+ "Rating dihitung <b>per orang</b>, walau bermain double. Kekuatan satu tim = rata-rata rating kedua pemainnya.",
+ "<b>Menang</b> menaikkan rating, <b>kalah</b> menurunkannya. <b>Seri</b> (mis. 5-5) hanya mengubah rating jika kedua tim berbeda kekuatan.",
+ "Menang melawan tim yang <b>lebih kuat</b> menambah rating lebih banyak. Kalah dari tim yang <b>lebih lemah</b> mengurangi lebih banyak.",
+ "<b>Skor ikut dihitung</b>: makin besar selisih game, makin besar perubahan rating."])+
+ `<div class="sc" style="margin-top:10px"><table><tr><th>Contoh: dua tim setara, pemain baru</th><th class="n">Pemenang</th><th class="n">Yang kalah</th></tr>`+row("Menang 6-4","+24","-24")+row("Menang 6-2","+30","-30")+row("Menang 6-0","+40","-40")+row("Seri 5-5","0","0")+`</table></div>`+
+ `<p class="mu" style="font-size:12px;margin:8px 0 0">Setelah 10 pertandingan, perubahan rating menjadi sedikit lebih kecil agar peringkat lebih stabil. Rumus: perubahan = faktor K × pengali skor × (hasil − peluang menang).</p></div>`+
+ `<div class="card"><h2>📊 Urutan dan Label</h2>`+ul([
+ "Urutan: <b>rating tertinggi</b>. Jika sama: persentase menang (seri dihitung setengah), selisih game, jumlah main, lalu nama.",
+ "Label <b>provisional</b>: baru bermain kurang dari 5 pertandingan, jadi peringkatnya masih bisa banyak berubah.",
+ "Label <b>tidak aktif</b>: tidak bermain selama 8 minggu. Rating tidak dikurangi.",
+ "Anggota yang belum pernah bertanding ada di kotak <b>Belum Pernah Bertanding</b> sampai bermain 1 kali."])+`</div>`+
+ `<div class="card"><h2>📅 Peringkat Harian</h2>`+ul([
+ "Untuk tiap hari ada pertandingan: <b>menang 3 poin, seri 1 poin, kalah 0 poin</b>.",
+ "Urutan: poin, selisih game, jumlah game yang dimenangkan, lalu nama. Tiap hari dihitung terpisah dari awal.",
+ "Pilih hari di tab <b>Harian</b> untuk melihat peringkat dan semua hasil pertandingan hari itu."])+`</div>`+
+ `<div class="card"><h2>🔥 Poin Keaktifan</h2>`+ul([
+ "<b>+1 poin</b> untuk setiap pertandingan yang diikuti, menang, seri, maupun kalah.",
+ "<b>+2 poin bonus</b> untuk setiap hari di mana Anda bermain minimal 2 pertandingan.",
+ "Contoh: bermain 3 pertandingan dalam satu hari = 3 + 2 = <b>5 poin</b>.",
+ "Poin dihitung per bulan dan total. Poin keaktifan <b>tidak memengaruhi rating</b>, dan menjadi dasar penghargaan Pemain Paling Rajin."])+`</div>`+
+ `<div class="card"><h2>💡 Tips Menambah Poin</h2>`+ul([
+ "Bermain rutin dan <b>daftarkan diri di jadwal</b> pertandingan berikutnya.",
+ "Usahakan bermain <b>2 pertandingan atau lebih</b> dalam sehari untuk bonus keaktifan.",
+ "Bermain dengan berbagai pasangan dan lawan membuat rating lebih mencerminkan kemampuan Anda.",
+ "Kemenangan atas tim yang lebih kuat dan menang dengan selisih besar menambah rating paling banyak."])+`</div>`}
 function toast(t){const d=document.createElement("div");d.textContent=t;d.style.cssText="position:fixed;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#0f2a43;color:#fff;padding:12px 14px;border-radius:10px;z-index:9;font-size:14px";document.body.appendChild(d);setTimeout(()=>d.remove(),5000)}
-const API_URL="https://script.google.com/macros/s/AKfycbyCyU0Rp1_n7KUVp5OsMa-CpFfhSTc4ZCDFLoPX6wQ620uNjLu5Kn3nBUM4VK9raaXZ/exec";
+const API_URL="GANTI_DENGAN_URL_APPS_SCRIPT";
 let CODE=null;try{CODE=localStorage.getItem("tic-code")}catch(e){}
 const cache=d=>{try{localStorage.setItem("tic-data",JSON.stringify(d))}catch(e){}};
 function setData(d){D=Object.assign({members:[],matches:[],jadwal:[],admins:[]},d)}
