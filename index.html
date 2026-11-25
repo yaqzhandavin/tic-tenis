@@ -157,7 +157,7 @@ function harian(P){
   `<div class="card"><h2>Hasil hari ini (${ms.length} pertandingan)</h2><div class="sc"><table>`+ms.map(m=>`<tr><td>${esc(m[1])} &amp; ${esc(m[2])}</td><td class="n"><b>${m[5]}-${m[6]}</b></td><td>${esc(m[3])} &amp; ${esc(m[4])}</td></tr>`).join("")+`</table></div></div>`+
   `<div class="card"><h2>Bagikan ke WhatsApp</h2><button class="btn wa" onclick="copyShare()">Salin rekap hari ini</button> <span id="cm" class="mu" style="font-size:13px"></span><textarea id="sh" rows="8" style="margin-top:10px;display:none" readonly></textarea></div>`}
 function toast(t){const d=document.createElement("div");d.textContent=t;d.style.cssText="position:fixed;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#0f2a43;color:#fff;padding:12px 14px;border-radius:10px;z-index:9;font-size:14px";document.body.appendChild(d);setTimeout(()=>d.remove(),5000)}
-const API_URL="GANTI_DENGAN_URL_APPS_SCRIPT";
+const API_URL="https://script.google.com/macros/s/AKfycbweJZj06O1kAY6j_j9aFcfC43bhTKPN48CxGNkvTfTfxFJaqbtU9zFrdcYs8yKUEpUa/exec";
 let CODE=null;try{CODE=localStorage.getItem("tic-code")}catch(e){}
 const cache=d=>{try{localStorage.setItem("tic-data",JSON.stringify(d))}catch(e){}};
 function setData(d){D=Object.assign({members:[],matches:[],jadwal:[],admins:[]},d)}
