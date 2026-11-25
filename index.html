@@ -78,7 +78,7 @@ function view(){const fo=document.querySelector("footer");if(fo&&D.updated)fo.te
   document.getElementById("upd").textContent=last?"Update terakhir: "+new Date(last+"T00:00:00").toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"}):"Belum ada data";
   const tabs=[["rank","Peringkat"],["hari","Harian"],["jad","Jadwal"],["act","Keaktifan"],["atur","Aturan"],["hist","Pertandingan"]];if(ADMIN)tabs.push(["adm","⚙ Admin"]);
   let h=D.demo?`<div class="note"><b>Data contoh.</b> Nama dan hasil di bawah hanya ilustrasi.${ADMIN?" Buka tab Admin untuk mulai dengan data nyata.":""}</div>`:"";
-  h+=`<div style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:10px;flex-wrap:wrap"><button class="btn wa" onclick="shareApp()">📤 Bagikan ke WhatsApp</button><button class="btn g" onclick="copyLink()">Salin tautan</button></div><div id="shr"></div>`;
+  h+=`<div style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:10px;flex-wrap:wrap"><button class="btn" onclick="copyLink()">🔗 Salin tautan</button></div><div id="shr"></div>`;
   h+=`<div class="kpi"><div class="k"><b>${pl.length}</b><span>Pemain berperingkat</span></div><div class="k"><b>${D.matches.length}</b><span>Pertandingan</span></div><div class="k"><b>${none.length}</b><span>Belum bertanding</span></div><div class="k"><b>${pl.length?Math.round(pl[0].r):"–"}</b><span>Rating tertinggi</span></div></div>`;
   h+=`<nav>${tabs.map(([k,l])=>`<button class="${tab===k?"on":""}" onclick="tab='${k}';view()">${l}</button>`).join("")}${ADMIN?'<button onclick="logoutA()">Keluar admin</button>':'<button onclick="loginA()">🔑 Admin</button>'}</nav>`;
   if(tab==="rank"){{const u=upc();if(u.length)h+=jCard(u[0],true)}h+=`<div class="note">ℹ️ <b>Cara mendapatkan poin dan peringkat:</b> menang, seri, dan skor memengaruhi rating; main rutin menambah poin keaktifan. <a href="#" onclick="tab='atur';view();window.scrollTo(0,0);return false"><b>Lihat tata cara penilaian →</b></a></div>`;
@@ -196,7 +196,7 @@ function aturan(){
  "Bermain dengan berbagai pasangan dan lawan membuat rating lebih mencerminkan kemampuan Anda.",
  "Kemenangan atas tim yang lebih kuat dan menang dengan selisih besar menambah rating paling banyak."])+`</div>`}
 function toast(t){const d=document.createElement("div");d.textContent=t;d.style.cssText="position:fixed;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#0f2a43;color:#fff;padding:12px 14px;border-radius:10px;z-index:9;font-size:14px";document.body.appendChild(d);setTimeout(()=>d.remove(),5000)}
-const API_URL="https://script.google.com/macros/s/AKfycbyCyU0Rp1_n7KUVp5OsMa-CpFfhSTc4ZCDFLoPX6wQ620uNjLu5Kn3nBUM4VK9raaXZ/exec";
+const API_URL="GANTI_DENGAN_URL_APPS_SCRIPT";
 let CODE=null;try{CODE=localStorage.getItem("tic-code")}catch(e){}
 const cache=d=>{try{localStorage.setItem("tic-data",JSON.stringify(d))}catch(e){}};
 function setData(d){D=Object.assign({members:[],matches:[],jadwal:[],admins:[]},d)}
