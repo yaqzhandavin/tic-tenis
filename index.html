@@ -196,7 +196,7 @@ function aturan(){
  "Bermain dengan berbagai pasangan dan lawan membuat rating lebih mencerminkan kemampuan Anda.",
  "Kemenangan atas tim yang lebih kuat dan menang dengan selisih besar menambah rating paling banyak."])+`</div>`}
 function toast(t){const d=document.createElement("div");d.textContent=t;d.style.cssText="position:fixed;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#0f2a43;color:#fff;padding:12px 14px;border-radius:10px;z-index:9;font-size:14px";document.body.appendChild(d);setTimeout(()=>d.remove(),5000)}
-const API_URL="GANTI_DENGAN_URL_APPS_SCRIPT";
+const API_URL="https://script.google.com/macros/s/AKfycbyCyU0Rp1_n7KUVp5OsMa-CpFfhSTc4ZCDFLoPX6wQ620uNjLu5Kn3nBUM4VK9raaXZ/exec";
 let CODE=null;try{CODE=localStorage.getItem("tic-code")}catch(e){}
 const cache=d=>{try{localStorage.setItem("tic-data",JSON.stringify(d))}catch(e){}};
 function setData(d){D=Object.assign({members:[],matches:[],jadwal:[],admins:[]},d)}
